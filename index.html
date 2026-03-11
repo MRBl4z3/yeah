@@ -2,114 +2,73 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Word Chain Game</title>
+<title>English Word Finder</title>
 
 <style>
 
 body{
-background:#030b18;
-color:#00eaff;
-font-family:monospace;
-text-align:center;
+font-family:Arial;
+background:#0f172a;
+color:white;
+display:flex;
+justify-content:center;
 padding:40px;
 }
 
+.container{
+width:700px;
+}
+
 h1{
-font-size:40px;
-text-shadow:0 0 10px #00eaff;
+margin-bottom:20px;
 }
 
 input{
 padding:10px;
 width:200px;
-background:#081424;
-border:1px solid #00eaff;
-color:white;
+margin-right:10px;
 }
 
-button{
-padding:10px 20px;
-margin-left:10px;
-background:#00eaff;
-border:none;
-cursor:pointer;
+select{
+padding:10px;
 }
 
-#log{
-margin-top:30px;
-border:1px solid #00eaff;
-padding:20px;
-min-height:120px;
+#results{
+margin-top:20px;
+max-height:400px;
+overflow:auto;
+background:#020617;
+padding:15px;
+border-radius:6px;
 }
 
-.valid{color:#00ff88}
-.invalid{color:#ff5555}
+.word{
+padding:4px 0;
+border-bottom:1px solid #1e293b;
+}
 
 </style>
 </head>
 
 <body>
 
-<h1>WORD CHAIN</h1>
+<div class="container">
 
-<p>Next word must start with: <b id="next">Any</b></p>
+<h1>English Word Finder</h1>
 
-<input id="wordInput" placeholder="type word">
-<button onclick="submitWord()">ENTER</button>
+<input id="search" placeholder="type word prefix">
 
-<div id="log"></div>
+<select id="sort">
+<option value="az">A-Z</option>
+<option value="short">Short → Long</option>
+<option value="long">Long → Short</option>
+</select>
 
-<script>
+<div id="results"></div>
 
-let lastLetter = ""
-let usedWords = []
+</div>
 
-async function submitWord(){
-
-let word = document.getElementById("wordInput").value.toLowerCase()
-
-if(!word) return
-
-if(usedWords.includes(word)){
-log("Word already used","invalid")
-return
-}
-
-if(lastLetter && !word.startsWith(lastLetter)){
-log("Word must start with '"+lastLetter+"'","invalid")
-return
-}
-
-let res = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+word)
-
-if(res.status!==200){
-log("Invalid English word","invalid")
-return
-}
-
-usedWords.push(word)
-
-lastLetter = word[word.length-1]
-
-document.getElementById("next").innerText = lastLetter.toUpperCase()
-
-log(word,"valid")
-
-document.getElementById("wordInput").value=""
-
-}
-
-function log(text,type){
-
-let el=document.createElement("div")
-el.className=type
-el.innerText=text
-
-document.getElementById("log").prepend(el)
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
